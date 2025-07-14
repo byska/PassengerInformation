@@ -16,12 +16,14 @@ namespace PassengerInformation.Application.UseCases.PassengersUseCases.Commands
     }
     public class AssignSeatCommandResponse
     {
-        public AssignSeatCommandResponse(bool ısAssigned)
+        public AssignSeatCommandResponse(bool ısAssigned, string message)
         {
             IsAssigned = ısAssigned;
+            Message = message;
         }
 
         public bool IsAssigned { get; set; }
+        public string? Message { get; set; }
 
     }
     public class AssignSeatCommandHandler
@@ -55,11 +57,11 @@ namespace PassengerInformation.Application.UseCases.PassengersUseCases.Commands
                 _passengerRepository.Update(passenger);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-                return new AssignSeatCommandResponse(true);
+                return new AssignSeatCommandResponse(true,null);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new AssignSeatCommandResponse(false);
+                return new AssignSeatCommandResponse(false, ex.Message);
             }
             
         }

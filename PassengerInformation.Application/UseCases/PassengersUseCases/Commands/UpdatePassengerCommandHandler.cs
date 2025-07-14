@@ -26,10 +26,12 @@ namespace PassengerInformation.Application.UseCases.PassengersUseCases.Commands
     public class UpdatePassengerCommandResponse
     {
         public bool IsUpdated { get; set; }
+        public string? Message { get; set; }
 
-        public UpdatePassengerCommandResponse(bool ısUpdated)
+        public UpdatePassengerCommandResponse(bool ısUpdated, string message)
         {
             IsUpdated = ısUpdated;
+            Message = message;
         }
     }
 
@@ -89,11 +91,11 @@ namespace PassengerInformation.Application.UseCases.PassengersUseCases.Commands
                 _passengerRepository.Update(passenger);
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-                return new UpdatePassengerCommandResponse(true);
+                return new UpdatePassengerCommandResponse(true,null);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new UpdatePassengerCommandResponse(false);
+                return new UpdatePassengerCommandResponse(false,ex.Message);
 
                 throw;
             }

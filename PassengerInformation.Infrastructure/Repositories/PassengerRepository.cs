@@ -21,35 +21,34 @@ namespace PassengerInformation.Infrastructure.Repositories
 
         public async Task AddAsync(Passenger passenger, CancellationToken cancellationToken)
         {
+            passenger.CreateDate = DateTime.Now;
             await _context.Passengers.AddAsync(passenger, cancellationToken);
         }
 
         public async Task<List<Passenger>> GetAllAsync(CancellationToken cancellationToken)
         {
-            return await _context.Passengers.ToListAsync(cancellationToken);
+            return await _context.Passengers.Where(x=>x.IsActive).ToListAsync(cancellationToken);
         }
 
         public async Task<Passenger?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
         {
             return await _context.Passengers
-                .FirstOrDefaultAsync(p => p.Id == id, cancellationToken);
+                .FirstOrDefaultAsync(p => p.Id == id && p.IsActive, cancellationToken);
         }
 
         public async Task<List<Passenger>> GetByFlightNumberAsync(string flightNumber, CancellationToken cancellationToken)
         {
             return await _context.Passengers
-                .Where(p => p.FlightNumber.Value == flightNumber)
+                .Where(p => p.FlightNumber.Value == flightNumber && p.IsActive)
                 .ToListAsync(cancellationToken);
         }
 
         public void Update(Passenger passenger)
         {
+            passenger.UpdateDate = DateTime.UtcNow;
             _context.Passengers.Update(passenger);
         }
 
-        public void Remove(Passenger passenger)
-        {
-            _context.Passengers.Remove(passenger);
-        }
+        
     }
 }

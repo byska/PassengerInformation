@@ -14,7 +14,6 @@ namespace PassengerInformation.Application.Abstractions
         Task<Passenger?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
         Task<List<Passenger>> GetByFlightNumberAsync(string flightNumber, CancellationToken cancellationToken);
         void Update(Passenger passenger);
-        void Remove(Passenger passenger);
     }
 }
 

@@ -21,10 +21,12 @@ namespace PassengerInformation.Application.UseCases.PassengersUseCases.Commands
     public class DeletePassengerCommandResponse
     {
         public bool IsDeleted { get; set; }
+        public string? Message { get; set; }
 
-        public DeletePassengerCommandResponse(bool ısDeleted)
+        public DeletePassengerCommandResponse(bool ısDeleted, string message)
         {
             IsDeleted = ısDeleted;
+            Message = message;
         }
     }
 
@@ -64,15 +66,16 @@ namespace PassengerInformation.Application.UseCases.PassengersUseCases.Commands
                     if (stillLinked)
                         throw new InvalidOperationException("This passenger is affiliated with others. Remove affiliations first.");
                 }
-
-                _passengerRepository.Remove(passenger);
+                passenger.DeleteDate = DateTime.UtcNow;
+                passenger.IsActive = false; 
+                
                 await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-                return new DeletePassengerCommandResponse(true);
+                return new DeletePassengerCommandResponse(true,null);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new DeletePassengerCommandResponse(false);
+                return new DeletePassengerCommandResponse(false,ex.Message);
 
             }
            

@@ -13,8 +13,6 @@ namespace PassengerInformation.Domain.ValueObjects
 
         public SeatNumber(string value)
         {
-            if (string.IsNullOrWhiteSpace(Value))
-                throw new ArgumentException("Koltuk numarası boş olamaz.");
 
             Value = value;
         }

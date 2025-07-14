@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace PassengerInformation.Domain.Entities
 {
-    public class Passenger
+    public class Passenger : EntityBase
     {
-        public Guid Id { get; private set; }
         public FlightNumber FlightNumber { get; private set; }
         public PassengerInfo Info { get; private set; }
         public SeatNumber? SeatNumber { get; private set; }
